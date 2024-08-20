@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web_autosubmit:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8100
+    container_name: web_autosubmit
+    ports:
+      - 8100:8100
+    env_file:
+      - ./.env
+    volumes:
+       - ./collectstatic:/usr/src/app/collectstatic
+       - uploads:/usr/src/app/uploads
+       - ./:/usr/src/app
+    depends_on:
+      - db_autosubmit
+  db_autosubmit:
+    image: mysql
+    restart: always
+    container_name: db_autosubmit
+    ports:
+            - "3310:3306"
+    volumes:
+      - mysql_data_autosubmit:/var/lib/mysql
+    env_file:
+      - ./.env
+volumes:
+  mysql_data_autosubmit:
+  uploads:
